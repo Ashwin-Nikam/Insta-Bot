@@ -29,7 +29,7 @@ def get_user_info(username):
     user_id = get_user_id(username)
     if user_id is None:
         print("User doesn't exist")
-        exit()
+        return
     request_url = (BASE_URL + 'users/%s/media/recent?count=%d&access_token=%s') % (user_id, count, access_token)
     print(request_url)
     recent_posts = requests.get(request_url).json()
@@ -109,8 +109,37 @@ def self_media_liked():
     else:
         print('Status code other than 200 received!')
 
+
+def get_post_id(user_id):
+    if user_id is None:
+        print("User doesn't exist")
+        return
+    request_url = (BASE_URL + 'users/%s/media/recent?count=1&access_token=%s') % (user_id, access_token)
+    post = requests.get(request_url).json()
+    if post['meta']['code'] == 200:
+        return post.get('data')[0]['id']
+    else:
+        print('Status code other than 200 received!')
+
+
+def like_a_post(username):
+    user_id = get_user_id(username)
+    media_id = get_post_id(user_id)
+    if media_id is None:
+        print("No recent posts to like")
+        return
+    request_url = (BASE_URL + 'media/%s/likes') % media_id
+    payload = {"access_token": access_token}
+    result = requests.post(request_url, payload).json()
+    if result['meta']['code'] == 200:
+        print('Like was successful')
+    else:
+        print('Like was unsuccessful, please try again!')
+
+
 #self_media_liked()
 #username = input("Enter instagram name: ")
 #get_user_info(username)
 #download_images(username)
+#like_a_post(username)
 #generate_tags()
