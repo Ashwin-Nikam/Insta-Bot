@@ -34,13 +34,9 @@ def get_user_info(username):
     print(request_url)
     recent_posts = requests.get(request_url).json()
     posts = recent_posts.get("data")
-    urls = []
-    captions = []
     for post in posts:
         urls.append(post.get("images").get("standard_resolution").get("url"))
         captions.append(post.get("caption").get("text"))
-    print(urls)
-    print(captions)
 
 
 def get_self_info():
@@ -70,6 +66,4 @@ def generate_tags():
 
 username = input("Enter instagram name: ")
 get_user_info(username)
-#get_self_info()
-#generate_tags()
-print(captions)
+generate_tags()
