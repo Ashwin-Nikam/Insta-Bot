@@ -140,17 +140,10 @@ def like_a_post(username):
         print('Like was unsuccessful, please try again!')
 
 
-tags = ['boy', 'stadium', 'dark', 'light', 'boy', 'stadium', 'dark', 'stadium', 'dark']
-freq_dict = {}
-for tag in tags:
-    freq_dict[tag] = tags.count(tag)
-keys = freq_dict.keys()
-values = freq_dict.values()
-WordCloud.create_cloud(freq_dict)
-
 #self_media_liked()
 #username = input("Enter instagram name: ")
 #get_user_info(username)
 #generate_tags()
 #download_images(username)
 #like_a_post(username)
+#WordCloud.generate_cloud(tags)
