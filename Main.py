@@ -28,16 +28,21 @@ def get_user_id(username):
 def get_user_info(username):
     count = 5
     user_id = get_user_id(username)
-    if user_id == None:
+    if user_id is None:
         print("User doesn't exist")
         exit()
     request_url = (BASE_URL + 'users/%s/media/recent?count=%d&access_token=%s') % (user_id, count, access_token)
     print(request_url)
     recent_posts = requests.get(request_url).json()
-    posts = recent_posts.get("data")
-    for post in posts:
-        urls.append(post.get("images").get("standard_resolution").get("url"))
-        captions.append(post.get("caption").get("text"))
+    if recent_posts['meta']['code'] == 200:
+        posts = recent_posts.get("data")
+        for post in posts:
+            urls.append(post.get("images").get("standard_resolution").get("url"))
+            captions.append(post.get("caption").get("text"))
+    else:
+        print
+        'Status code other than 200 received!'
+        exit()
 
 
 def get_self_info():
@@ -45,10 +50,15 @@ def get_self_info():
     request_url = (BASE_URL + 'users/self/media/recent?count=%d&access_token=%s') % (count, access_token)
     print(request_url)
     recent_posts = requests.get(request_url).json()
-    posts = recent_posts.get("data")
-    for post in posts:
-        urls.append(post.get("images").get("standard_resolution").get("url"))
-        captions.append(post.get("caption").get("text"))
+    if recent_posts['meta']['code'] == 200:
+        posts = recent_posts.get("data")
+        for post in posts:
+            urls.append(post.get("images").get("standard_resolution").get("url"))
+            captions.append(post.get("caption").get("text"))
+    else:
+        print
+        'Status code other than 200 received!'
+        exit()
 
 
 def generate_tags():
@@ -57,8 +67,8 @@ def generate_tags():
         url = urls[i]
         caption = captions[i]
         dict = model.predict_by_url(url=url)
-        newOutput = dict.get('outputs')
-        concepts = newOutput[0].get('data').get('concepts')
+        new_output = dict.get('outputs')
+        concepts = new_output[0].get('data').get('concepts')
         print(caption)
         for concept in concepts:
             print(concept.get('name'), " : ", concept.get('value'))
