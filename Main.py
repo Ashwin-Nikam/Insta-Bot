@@ -16,7 +16,7 @@ def get_user_id(username):
     user_info = requests.get(request_url).json()
     if user_info['meta']['code'] == 200:
         if len(user_info['data']):
-            return user_info['data'][0]['username']
+            return user_info['data'][0]['id']
         else:
             return None
     else:
@@ -68,5 +68,8 @@ def generate_tags():
         print("-------")
 
 
-get_self_info()
-generate_tags()
+username = input("Enter instagram name: ")
+get_user_info(username)
+#get_self_info()
+#generate_tags()
+print(captions)
