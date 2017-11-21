@@ -2,6 +2,7 @@ import requests
 from clarifai.rest import ClarifaiApp
 import config
 import urllib.request
+import WordCloud
 
 app = ClarifaiApp(api_key=config.clarifai_key)
 model = app.models.get("general-v1.3")
@@ -9,6 +10,7 @@ access_token = config.access_token
 BASE_URL = "https://api.instagram.com/v1/"
 urls = []
 captions = []
+tags = []
 
 
 def get_user_id(username):
@@ -90,6 +92,7 @@ def generate_tags():
         print(caption)
         for concept in concepts:
             print(concept.get('name'), " : ", concept.get('value'))
+            tags.append(concept.get('name'))
         print("-------")
 
 
@@ -137,9 +140,17 @@ def like_a_post(username):
         print('Like was unsuccessful, please try again!')
 
 
+tags = ['boy', 'stadium', 'dark', 'light', 'boy', 'stadium', 'dark', 'stadium', 'dark']
+freq_dict = {}
+for tag in tags:
+    freq_dict[tag] = tags.count(tag)
+keys = freq_dict.keys()
+values = freq_dict.values()
+WordCloud.create_cloud(freq_dict)
+
 #self_media_liked()
 #username = input("Enter instagram name: ")
 #get_user_info(username)
+#generate_tags()
 #download_images(username)
 #like_a_post(username)
-#generate_tags()
