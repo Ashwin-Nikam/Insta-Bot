@@ -1,6 +1,7 @@
 import requests
 from clarifai.rest import ClarifaiApp
 import config
+import urllib.request
 
 app = ClarifaiApp(api_key=config.clarifai_key)
 model = app.models.get("general-v1.3")
@@ -61,6 +62,29 @@ def get_self_info():
         exit()
 
 
+def download_images(username):
+    count = 5
+    user_id = get_user_id(username)
+    if user_id is None:
+        print("User doesn't exist")
+        exit()
+    request_url = (BASE_URL + 'users/%s/media/recent?count=%d&access_token=%s') % (user_id, count, access_token)
+    print(request_url)
+    recent_posts = requests.get(request_url).json()
+    if recent_posts['meta']['code'] == 200:
+        posts = recent_posts.get("data")
+        if len(posts) is 0:
+            return
+        for post in posts:
+            url = post.get("images").get("standard_resolution").get("url")
+            filename = post['id'] + ".jpeg"
+            urllib.request.urlretrieve(url, filename)
+    else:
+        print
+        'Status code other than 200 received!'
+        exit()
+
+
 def generate_tags():
     for i in range(len(urls)):
         print("Picture ", i + 1)
@@ -76,5 +100,6 @@ def generate_tags():
 
 
 username = input("Enter instagram name: ")
-get_user_info(username)
-generate_tags()
+#get_user_info(username)
+download_images(username)
+#generate_tags()
