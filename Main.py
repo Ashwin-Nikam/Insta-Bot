@@ -26,11 +26,12 @@ def get_user_id(username):
 
 
 def get_user_info(username):
+    count = 5
     user_id = get_user_id(username)
     if user_id == None:
         print("User doesn't exist")
         exit()
-    request_url = (BASE_URL + 'users/%s/media/recent?access_token=%s') % (user_id, access_token)
+    request_url = (BASE_URL + 'users/%s/media/recent?count=%d&access_token=%s') % (user_id, count, access_token)
     print(request_url)
     recent_posts = requests.get(request_url).json()
     posts = recent_posts.get("data")
