@@ -21,9 +21,7 @@ def get_user_id(username):
         else:
             return None
     else:
-        print
-        'Status code other than 200 received!'
-        exit()
+        print('Status code other than 200 received!')
 
 
 def get_user_info(username):
@@ -40,10 +38,9 @@ def get_user_info(username):
         for post in posts:
             urls.append(post.get("images").get("standard_resolution").get("url"))
             captions.append(post.get("caption").get("text"))
+        print(captions)
     else:
-        print
-        'Status code other than 200 received!'
-        exit()
+        print('Status code other than 200 received!')
 
 
 def get_self_info():
@@ -56,10 +53,9 @@ def get_self_info():
         for post in posts:
             urls.append(post.get("images").get("standard_resolution").get("url"))
             captions.append(post.get("caption").get("text"))
+        print(captions)
     else:
-        print
-        'Status code other than 200 received!'
-        exit()
+        print('Status code other than 200 received!')
 
 
 def download_images(username):
@@ -80,9 +76,7 @@ def download_images(username):
             filename = post['id'] + ".jpeg"
             urllib.request.urlretrieve(url, filename)
     else:
-        print
-        'Status code other than 200 received!'
-        exit()
+        print('Status code other than 200 received!')
 
 
 def generate_tags():
@@ -99,7 +93,24 @@ def generate_tags():
         print("-------")
 
 
-username = input("Enter instagram name: ")
+def self_media_liked():
+    request_url = (BASE_URL + "users/self/media/liked?access_token=%s") % (access_token)
+    print(request_url)
+    result = requests.get(request_url).json()
+    if result['meta']['code'] == 200:
+        posts = result.get("data")
+        if len(posts) is 0:
+            print("No recent liked photos!")
+            return
+        for post in posts:
+            urls.append(post.get("images").get("standard_resolution").get("url"))
+            captions.append(post.get("caption").get("text"))
+        print(captions)
+    else:
+        print('Status code other than 200 received!')
+
+#self_media_liked()
+#username = input("Enter instagram name: ")
 #get_user_info(username)
-download_images(username)
+#download_images(username)
 #generate_tags()
