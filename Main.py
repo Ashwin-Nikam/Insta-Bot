@@ -3,6 +3,7 @@ from clarifai.rest import ClarifaiApp
 import config
 import urllib.request
 import SentimentAnalysis
+import Plot
 
 #app = ClarifaiApp(api_key=config.clarifai_key)
 #model = app.models.get("general-v1.3")
@@ -158,7 +159,7 @@ def get_locations():
         print('Status code other than 200 received!')
 
 get_locations()
-print(locations)
+Plot.plot_points(locations)
 #self_media_liked()
 #username = input("Enter instagram name: ")
 #get_user_info(username)
