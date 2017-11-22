@@ -2,15 +2,16 @@ import requests
 from clarifai.rest import ClarifaiApp
 import config
 import urllib.request
-import WordCloud
+import SentimentAnalysis
 
-app = ClarifaiApp(api_key=config.clarifai_key)
-model = app.models.get("general-v1.3")
+#app = ClarifaiApp(api_key=config.clarifai_key)
+#model = app.models.get("general-v1.3")
 access_token = config.access_token
 BASE_URL = "https://api.instagram.com/v1/"
 urls = []
 captions = []
 tags = []
+locations = []
 
 
 def get_user_id(username):
@@ -140,10 +141,27 @@ def like_a_post(username):
         print('Like was unsuccessful, please try again!')
 
 
+def get_locations():
+    request_url = (BASE_URL + 'users/self/media/recent?access_token=%s') % (access_token)
+    print(request_url)
+    recent_posts = requests.get(request_url).json()
+    if recent_posts['meta']['code'] == 200:
+        posts = recent_posts.get("data")
+        for post in posts:
+            if post.get('location') == None:
+                continue
+            else:
+                temp = [post.get('location')['latitude']]
+                temp.append(post.get('location')['longitude'])
+            locations.append(temp)
+    else:
+        print('Status code other than 200 received!')
+
+get_locations()
+print(locations)
 #self_media_liked()
 #username = input("Enter instagram name: ")
 #get_user_info(username)
 #generate_tags()
 #download_images(username)
 #like_a_post(username)
-#WordCloud.generate_cloud(tags)
