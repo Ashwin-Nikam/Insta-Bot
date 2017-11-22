@@ -5,8 +5,8 @@ import urllib.request
 import SentimentAnalysis
 import Plot
 
-#app = ClarifaiApp(api_key=config.clarifai_key)
-#model = app.models.get("general-v1.3")
+app = ClarifaiApp(api_key=config.clarifai_key)
+model = app.models.get("general-v1.3")
 access_token = config.access_token
 BASE_URL = "https://api.instagram.com/v1/"
 urls = []
@@ -158,11 +158,32 @@ def get_locations():
     else:
         print('Status code other than 200 received!')
 
-get_locations()
-Plot.plot_points(locations)
-#self_media_liked()
-#username = input("Enter instagram name: ")
-#get_user_info(username)
-#generate_tags()
-#download_images(username)
-#like_a_post(username)
+
+username = input("Enter name :")
+
+while True:
+    print("==========================")
+    print("What would you like to do?")
+    print("1: Generate Tags from images")
+    print("2: Download images")
+    print("3. Like a post")
+    print("4. Get recent media like by user")
+    print("5. Plot locations of photos on map")
+    print("6. Exit")
+    val = int(input())
+    if val == 1:
+        get_user_info(username)
+        generate_tags()
+    elif val == 2:
+        download_images(username)
+    elif val == 3:
+        like_a_post(username)
+    elif val == 4:
+        self_media_liked()
+    elif val == 5:
+        get_locations()
+        Plot.plot_points(locations)
+    elif val == 6:
+        break
+    else:
+        print("Invalid input")
